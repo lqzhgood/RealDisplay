@@ -124,7 +124,7 @@
             </div>
             <div class="right box">
                 <div class="row">
-                    <span class="selectText">DPI: {{seleDpi.dpi | toFixed()}}    Seaech: </span>
+                    Resolution: <span>{{myDpi.w}}</span> × <span>{{myDpi.h}}</span> - <span class="selectText">DPI: {{seleDpi.dpi | toFixed()}}    Seaech: </span>
                     <!-- <div> -->
                     <v-select class="select" v-model="selectV" :options="allDpi" label="name"></v-select>
                     <!-- </div> -->
@@ -135,6 +135,10 @@
                 </div>
                 <span class="title">Show Driver</span>
             </div>
+        </div>
+
+        <div>
+            <button type="button" name="button" @click="localStorage.clear()">clear All Cache</button>
         </div>
 
         <div id="imgOrPage">
