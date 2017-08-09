@@ -50,7 +50,17 @@ Url > WinApi > HTML5 localStorage > UserInput
 ## F.A.Q
 
 - every choice and input you write will be written to `HTML5 localStorage`
-- how do I find the scaling ratio of my current device (Dpr)?
-![Aaron Swartz](https://github.com/lqzhgood/RealDisplay/blob/master/img/win10.jpg?raw=true)
 
+- how do I find the scaling ratio of my current device (Dpr)?
+
+![Aaron Swartz](https://github.com/lqzhgood/RealDisplay/blob/master/img/win10.jpg?raw=true)
+```text
 If you choose 100%, then Dpr is 1, and if you choose 150%, Dpr is 1.5, and so on.
+```
+
+- Why did I enter Url invalid in Page ?
+``` text
+Iframe is not allowed because the site settings are open. You can see the related error in F12.
+e.g. www.google.com
+Refused to display 'https://www.google.com.hk/?gfe_rd=cr&ei=v-qKWZ-7E4TD8AeziJW4Cg' in a frame because it set 'X-Frame-Options' to 'sameorigin'.
+```

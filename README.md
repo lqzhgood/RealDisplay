@@ -53,7 +53,17 @@ Url > WinApi > HTML5 localStorage > UserInput
 ## 说明
 
  - 你的每一次选择和输入将会写入 `HTML5 localStorage`
- - 如何查找我当前设备的缩放比例（Dpr），
-![Aaron Swartz](https://github.com/lqzhgood/RealDisplay/blob/master/img/win10.jpg?raw=true)
 
+ - 如何查找我当前设备的缩放比例（Dpr）
+
+![Aaron Swartz](https://github.com/lqzhgood/RealDisplay/blob/master/img/win10.jpg?raw=true)
+```text
 如果你选择的是 100%，则 Dpr 为 1，如果选择的是 150% 则 Dpr 为 1.5，以此类推。
+```
+
+- 为什么我在 Page 中输入 Url 无效？
+``` text
+因为网站设置了禁止 iframe 打开。你可以在 F12 中看到相关错误。
+例如 www.google.com
+Refused to display 'https://www.google.com.hk/?gfe_rd=cr&ei=v-qKWZ-7E4TD8AeziJW4Cg' in a frame because it set 'X-Frame-Options' to 'sameorigin'.
+```
