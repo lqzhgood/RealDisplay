@@ -29,10 +29,10 @@
 
 ** 对角线 Diagonal 的单位是 英尺 **
 
-> http://abc.com/?my=@24
->  http://abc.com/?my=@15.6^1.2
->   http://abc.com/?my=@24^1&show=1080x1920@5.5
->  http://abc.com/?my=@15.6&show=1080x1920@5.5
+> http://lqzhgood.github.io/RealDisplay/?my=@24
+> http://lqzhgood.github.io/RealDisplay/?my=@15.6^1.2
+> http://lqzhgood.github.io/RealDisplay/?my=@24^1&show=1080x1920@5.5
+> http://lqzhgood.github.io/RealDisplay/?my=@15.6&show=1080x1920@5.5
 
 
 #### WinApi

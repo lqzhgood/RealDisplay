@@ -27,10 +27,10 @@ You can select / paste pictures or open pages to see the physical size effects o
 
 ** The diagonal units are inches **
 
-> http://abc.com/?my=@24
->  http://abc.com/?my=@15.6^1.2
->   http://abc.com/?my=@24^1&show=1080x1920@5.5
->  http://abc.com/?my=@15.6&show=1080x1920@5.5
+> http://lqzhgood.github.io/RealDisplay/?my=@24 
+> http://lqzhgood.github.io/RealDisplay/?my=@15.6^1.2
+> http://lqzhgood.github.io/RealDisplay/?my=@24^1&show=1080x1920@5.5
+> http://lqzhgood.github.io/RealDisplay/?my=@15.6&show=1080x1920@5.5
 
 
 #### WinApi
@@ -60,7 +60,7 @@ If you choose 100%, then Dpr is 1, and if you choose 150%, Dpr is 1.5, and so on
 
 - Why did I enter Url invalid in Page ?
 ``` text
-Because this url website settings is not allowed open in iframe. You can see more related info in F12.
+Iframe is not allowed because the site settings are open. You can see the related error in F12.
 e.g. www.google.com
 Refused to display 'https://www.google.com.hk/?gfe_rd=cr&ei=v-qKWZ-7E4TD8AeziJW4Cg' in a frame because it set 'X-Frame-Options' to 'sameorigin'.
 ```
