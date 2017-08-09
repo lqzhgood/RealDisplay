@@ -5,7 +5,7 @@ Show other device physical size in you Display
 
 ##  Preview
 
-[lqzhgood.github.io/RealDisplay/](http://lqzhgood.github.io/RealDisplay/)
+[lqzh.me/RealDisplay/](http://lqzh.me/RealDisplay/)
 
 ----------------
 
@@ -27,10 +27,10 @@ You can select / paste pictures or open pages to see the physical size effects o
 
 ** The diagonal units are inches **
 
-> http://lqzhgood.github.io/RealDisplay/?my=@24 
-> http://lqzhgood.github.io/RealDisplay/?my=@15.6^1.2
-> http://lqzhgood.github.io/RealDisplay/?my=@24^1&show=1080x1920@5.5
-> http://lqzhgood.github.io/RealDisplay/?my=@15.6&show=1080x1920@5.5
+> http://lqzh.me/RealDisplay/?my=@24  <br/>
+> http://lqzh.me/RealDisplay/?my=@15.6^1.2   <br/>
+> http://lqzh.me/RealDisplay/?my=@24^1&show=1080x1920@5.5  <br/>
+> http://lqzh.me/RealDisplay/?my=@15.6&show=1080x1920@5.5   <br/>
 
 
 #### WinApi

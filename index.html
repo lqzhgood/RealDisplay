@@ -200,7 +200,7 @@
                     }
                     this.myDpi = mkMyDpi;
                     localStorage.myDpi = JSON.stringify(this.myDpi);
-                    location.href = location.origin;
+                    location.href = location.origin + location.pathname;
                 } else if (myDpi && myDpi.HORZSIZE && myDpi.VERTSIZE && myDpi.HORZRES && myDpi.VERTRES) {
                     // winApi
                     myDpi.HORZSIZE = myDpi.HORZSIZE * 0.0393700787;
