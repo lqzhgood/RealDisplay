@@ -143,7 +143,7 @@
                 <label for="img">Image</label>
                 <span> - </span>
                 <input type="radio" id="page" value="page" v-model="mode">
-                <label for="page">Page</label>
+                <label for="page" @click.once="page='3g.163.com'">Page</label>
             </div>
             <div>
                 <input type="file" accept="image/*" @change="upImg" ref="imgInput" v-show="mode == 'img'">
@@ -254,7 +254,7 @@
             },
             data: {
                 mode: "img",
-                pageUrl: "3g.163.com",
+                pageUrl: "",
                 imgUrl: "./img/img.jpg",
                 myDpi: {
                     "name": 'myDrive',
