@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RealDisplay</title>
+    <style media="screen">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            text-align: center;
+            background-color: #eee;
+            color: #333;
+        }
+
+        .top {
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+            height: 78px;
+            line-height: 78px;
+            background: #fff;
+            text-align: center;
+            display: flex;
+            font-size: 14px;
+        }
+
+        .top input {
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            outline: none;
+            width: 50px;
+            text-align: center;
+            padding: 0 5px;
+        }
+
+        .top .row {
+            line-height: 34px;
+            height: 34px;
+            white-space: nowrap;
+        }
+
+        .top .box {
+            padding: 5px 10px;
+            position: relative;
+        }
+
+        .top .select {
+            display: inline-block;
+            min-width: 400px;
+        }
+
+        .top .selectText {
+            height: 34px;
+            line-height: 34px;
+            display: inline-block;
+            float: left;
+        }
+
+        .title {
+            opacity: 0.5;
+            font-style: oblique;
+            font-size: 16px;
+        }
+
+        .left {
+            width: 50%;
+            text-align: right;
+            border-right: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .left .title {
+            position: absolute;
+            left: 10px;
+            z-index: 0;
+            top: 10px;
+        }
+
+        .right {
+            width: 50%;
+            text-align: left;
+        }
+
+        .right .title {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 0;
+        }
+
+        #imgOrPage {
+            margin: 25px 0;
+        }
+
+        #wrap {
+            display: inline-block;
+            overflow: hidden;
+            box-shadow: 0 9px 3px -6px rgba(0, 0, 0, .2), 0 6px 6px 0 rgba(0, 0, 0, .14), 0 3px 15px 0 rgba(0, 0, 0, .12);
+        }
+
+        #content {
+            display: inline-block;
+            text-align: left;
+            overflow: hidden;
+            background: #999;
+            transform-origin: 0 0;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="app" @paste="pasteImg($event)">
+        <div class="top">
+            <div class="left box">
+                <span class="title">my Driver</span>
+                <div class="row myDpi">DPI: {{myDpi.dpi | toFixed()}}</div>
+                <div class="row">Diagonal: <input type="number" min="1" v-model="myDpi.d">″ - DPR: <input type="number" min="1" v-model="myDpi.dpr" class="myDpr">″</div>
+            </div>
+            <div class="right box">
+                <div class="row">
+                    <span class="selectText">DPI: {{seleDpi.dpi | toFixed()}}    Seaech: </span>
+                    <!-- <div> -->
+                    <v-select class="select" v-model="selectV" :options="allDpi" label="name"></v-select>
+                    <!-- </div> -->
+                </div>
+                <div class="row" ref="selectInputs">
+                    Resolution: <input disabled type="number" min="1" v-model="seleDpi.w"> × <input disabled type="number" min="1" v-model="seleDpi.h"> - Diagonal: <input disabled type="number" min="1" v-model="seleDpi.d">″
+                    <button @click="customFlag=true">custom</button>
+                </div>
+                <span class="title">Show Driver</span>
+            </div>
+        </div>
+
+        <div id="imgOrPage">
+            <div>
+                <input type="radio" id="img" value="img" v-model="mode" checked="checked">
+                <label for="img">Image</label>
+                <span> - </span>
+                <input type="radio" id="page" value="page" v-model="mode">
+                <label for="page">Page</label>
+            </div>
+            <div>
+                <input type="file" accept="image/*" @change="upImg" ref="imgInput" v-show="mode == 'img'">
+                <p v-show="mode == 'page'"> http:// <input type="url" v-model.lazy="pageUrl"> </p>
+            </div>
+        </div>
+        <div id="wrap" :style="{width:showDpi.rW+'px',height:showDpi.rH+'px'}">
+            <div id="content" :style="{width:showDpi.w+'px',height:showDpi.h+'px','transform':'scale('+showZoom+')'}">
+                <img :src="imgUrl" alt="" v-show="mode == 'img'">
+                <iframe :src="'http://' + pageUrl" v-show="mode == 'page'" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" style="height:200px;width:200px">
+
+    </div>
+    <script src="./lib/vue.min.js"></script>
+    <script src="./lib/vue-select.js"></script>
+    <script src="./myDpi.js"></script>
+    <script src="./all.js"></script>
+    <script>
+        Vue.component('v-select', VueSelect.VueSelect)
+        new Vue({
+            el: "#app",
+            created() {
+                //do something after creating vue instance
+                this.allDpi = screens;
+                let mkMyDpi = {
+                    name: 'myDrive',
+                    dpi: 2, // must
+                    dpr: 2, // must
+                    d: 1,
+                    w: window.screen.width,
+                    h: window.screen.height
+                }
+                let my = getQueryString('my');
+                if (/^@\d{1,}(\.{1,}\d{1,}){0,}\^\d{1}(\.{1,}\d{1,}){0,}$/.test(my) || /^@\d{1,}(\.{1,}\d{1,}){0,}$/.test(my)) {
+                    // url
+                    my = my.replace(/(@|\^)/g, '-').split("-");
+                    mkMyDpi.d = my[1];
+                    my[2] ? mkMyDpi.dpr = my[2] : mkMyDpi.dpr = 1;
+                    mkMyDpi.dpi = Math.sqrt(Math.pow(mkMyDpi.w, 2) + Math.pow(mkMyDpi.h, 2)) / mkMyDpi.d;
+                    // show
+                    let show = getQueryString('show');
+                    if (/^\d{1,}x\d{1,}@\d{1,}(\.{1,}\d{1,}){0,}$/.test(show)) {
+                        show = show.replace(/(x|@|\^)/gi, '-').split("-");
+                        this.custom.w = show[0];
+                        this.custom.h = show[1];
+                        this.custom.d = show[2];
+                        this.custom.dpi = Math.sqrt(Math.pow(this.custom.w, 2) + Math.pow(this.custom.h, 2)) / this.custom.d;
+                        this.customFlag = true;
+                        localStorage.selectDpi = JSON.stringify(this.custom);
+                    }
+                    this.myDpi = mkMyDpi;
+                    localStorage.myDpi = JSON.stringify(this.myDpi);
+                    location.href = location.origin;
+                } else if (myDpi && myDpi.HORZSIZE && myDpi.VERTSIZE && myDpi.HORZRES && myDpi.VERTRES) {
+                    // winApi
+                    myDpi.HORZSIZE = myDpi.HORZSIZE * 0.0393700787;
+                    myDpi.VERTSIZE = myDpi.VERTSIZE * 0.0393700787;
+                    let lin = Math.sqrt(Math.pow(myDpi.HORZSIZE, 2) + Math.pow(myDpi.VERTSIZE, 2));
+                    let lpx = Math.sqrt(Math.pow(myDpi.HORZRES, 2) + Math.pow(myDpi.VERTRES, 2));
+                    let dpi = (lpx / lin);
+                    mkMyDpi = {
+                        name: 'myDrive',
+                        dpi: dpi, // must
+                        dpr: myDpi.DPR, // must
+                        d: lin,
+                        w: myDpi.HORZRES,
+                        h: myDpi.VERTRES
+                    }
+                    this.myDpi = mkMyDpi;
+                } else {
+                    if (!localStorage.myDpi) {
+                        // user input
+                        let name = prompt("Please input you @Dpi^Dpr: \n if you Display diagonal is 24 inch, and System scaling is 100%, Please enter @24^1", "@24^1");
+                        if (!name) name = "@24^1";
+                        if (/^@\d{1,}(\.{1,}\d{1,}){0,}\^\d{1}(\.{1,}\d{1,}){0,}$/.test(name) || /^@\d{1,}(\.{1,}\d{1,}){0,}$/.test(name)) {
+                            name = name.replace(/(@|\^)/g, '-').split("-");
+                            mkMyDpi.d = name[1];
+                            name[2] ? mkMyDpi.dpr = name[2] : mkMyDpi.dpr = 1;
+                            mkMyDpi.dpi = Math.sqrt(Math.pow(mkMyDpi.w, 2) + Math.pow(mkMyDpi.h, 2)) / mkMyDpi.d;
+                        } else {
+                            mkMyDpi.d = 24;
+                            mkMyDpi.dpr = 1;
+                            mkMyDpi.dpi = 141;
+                        }
+                        this.myDpi = mkMyDpi;
+                        localStorage.myDpi = JSON.stringify(this.myDpi);
+                    } else {
+                        this.myDpi = JSON.parse(localStorage.myDpi)
+                    }
+                }
+            },
+            mounted() {
+                this.$nextTick(() => {
+                    if (localStorage.selectDpi) {
+                        this.selectV = JSON.parse(localStorage.selectDpi);
+                        if (this.selectV.name == 'custom') {
+                            this.custom = JSON.parse(localStorage.selectDpi);
+                            this.customFlag = true;
+                        }
+                    } else {
+                        this.selectV = this.allDpi[25];
+                    }
+                })
+            },
+            data: {
+                mode: "img",
+                pageUrl: "3g.163.com",
+                imgUrl: "./img/img.jpg",
+                myDpi: {
+                    "name": 'myDrive',
+                    "dpi": '',
+                    "dpr": '',
+                    "d": "",
+                    "w": '',
+                    "h": ''
+                },
+                allDpi: [],
+                selectV: '',
+                seleDpi: '',
+                customFlag: false,
+                custom: {
+                    "name": "custom",
+                    "w": 1,
+                    "h": 1,
+                    "d": 1,
+                    "dpi": 1,
+                    "dpr": 1
+                }
+            },
+            watch: {
+                customFlag() {
+                    let dom = this.$refs.selectInputs.childNodes;
+                    if (this.customFlag) {
+                        this.selectV = this.custom;
+                        for (let i = 0; i < dom.length; i++) {
+                            if (dom[i].nodeName.toLocaleUpperCase() == 'INPUT') {
+                                dom[i].removeAttribute('disabled');
+                            }
+                        }
+                    } else {
+                        for (let i = 0; i < dom.length; i++) {
+                            if (dom[i].nodeName.toLocaleUpperCase() == 'INPUT') {
+                                dom[i].setAttribute('disabled', true);
+                            }
+                        }
+                    }
+                },
+                custom: {
+                    handler: function() {
+                        this.custom.dpi = Math.sqrt(Math.pow(this.custom.w, 2) + Math.pow(this.custom.h, 2)) / this.custom.d;
+                    },
+                    deep: true
+                },
+                myDpi: {
+                    handler: function() {
+                        this.myDpi.dpi = Math.sqrt(Math.pow(this.myDpi.w, 2) + Math.pow(this.myDpi.h, 2)) / this.myDpi.d;
+                        localStorage.myDpi = JSON.stringify(this.myDpi);
+                    },
+                    deep: true
+                },
+                seleDpi: {
+                    handler: function() {
+                        localStorage.selectDpi = JSON.stringify(this.seleDpi);
+                    },
+                    deep: true
+                },
+                selectV(newV, oldV) {
+                    let seleV = this.selectV;
+                    if (seleV) {
+                        this.seleDpi = newV;
+                        if (seleV.name != 'custom') {
+                            this.customFlag = false;
+                        }
+                    } else {
+                        this.seleDpi = oldV;
+                    }
+                }
+            },
+            computed: {
+                showDpi() {
+                    let sele = this.seleDpi;
+                    let show = {
+                        w: sele.w,
+                        h: sele.h,
+                        rW: sele.w / sele.dpi * this.myDpi.dpi / this.myDpi.dpr,
+                        rH: sele.h / sele.dpi * this.myDpi.dpi / this.myDpi.dpr
+                    }
+                    return show;
+                },
+                showZoom() {
+                    let myDpi = this.myDpi.dpi;
+                    let myDpr = this.myDpi.dpr;
+                    let showDpi = this.seleDpi.dpi;
+                    return myDpi / myDpr / showDpi;
+                }
+            },
+            methods: {
+                upImg() {
+                    let files = this.$refs.imgInput.files;
+                    if (files.length > 0) {
+                        this.imgUrl = window.URL.createObjectURL(files[0]);
+                    }
+                },
+                pasteImg(e) {
+                    //判断是否是粘贴图片
+                    if (e.clipboardData && e.clipboardData.items[0].type.indexOf('image') > -1) {
+                        var reader = new FileReader();
+                        file = e.clipboardData.items[0].getAsFile();
+                        this.imgUrl = window.URL.createObjectURL(file);
+                    }
+                }
+            },
+            filters: {
+                toFixed(v, num) {
+                    num ? num : num = 0;
+                    return (v * 1).toFixed(num)
+                }
+            }
+        })
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
+
+    </script>
+</body>
+
+</html>
