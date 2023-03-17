@@ -6,7 +6,7 @@
 
 ##  预览
 
-[lqzh.me/RealDisplay/](http://lqzh.me/RealDisplay/)
+[http://lqzhgood.github.io/RealDisplay/](http://lqzhgood.github.io/RealDisplay/)
 
 ----------------
 
